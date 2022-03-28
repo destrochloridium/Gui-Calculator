@@ -2,14 +2,43 @@
 
 # GUI CALCULATOR
 
-**A Simple Gui Calculator With UI Design in Tkinter**
+> **A Simple Gui Calculator With UI Design in Tkinter**
 
 ## Table of Contents
 
 - [Introduction](#Introduction)
-- [Installation](# Installation)
-- [Installation or Getting Started](#Installation or Getting Started)
+- [Installation Getting Started](#Installation-or-Getting-Started)
+- [Usage](#Usage)
+- [License](#License)
 
 ## Introduction
-## Installation
+You can do 4 math operations **quickly** and **easily** in this calculator with a **simple** and **modern interface**.
 ## Installation or Getting Started
+> Your **Python** version must be **3** or **higher** to use this program.
+
+Install the necessary dependencies by running.
+* `pip install -r requirements.txt`
+
+> In the event that pip doesn't work, also try the following commands:
+        
+* `pip3 install -r requirements.txt`
+         
+* `python -m pip install -r requirements.txt`
+         
+* `python3 -m pip install -r requirements.txt`
+         
+> If this still doesn't work, ensure that Python is added to the PATH.
+   
+   
+**This will install all requirements.**
+
+## Usage
+
+After **downloading** the **necessary files**, run the 
+
+> **main.py**
+
+file.
+
+## License
+- **[MIT LICENSE](http://opensource.org/licenses/mit-license.php)** *is used in this project.*
