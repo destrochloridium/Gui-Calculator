@@ -3,3 +3,9 @@
 # GUI CALCULATOR
 
 **A Simple Gui Calculator With UI Design in Tkinter**
+
+## Table of Contents
+
+- [Introduction](#Introduction)
+
+## Introduction
