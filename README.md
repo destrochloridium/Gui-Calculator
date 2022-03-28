@@ -7,5 +7,9 @@
 ## Table of Contents
 
 - [Introduction](#Introduction)
+- [Installation](# Installation)
+- [Installation or Getting Started](#Installation or Getting Started)
 
 ## Introduction
+## Installation
+## Installation or Getting Started
