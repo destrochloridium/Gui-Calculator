@@ -9,6 +9,7 @@
 - [Introduction](#Introduction)
 - [Installation Getting Started](#Installation-or-Getting-Started)
 - [Usage](#Usage)
+- [Releases](#Releases)
 - [License](#License)
 
 ## Introduction
@@ -39,6 +40,17 @@ After **downloading** the **necessary files**, run the
 > **main.py**
 
 file.
+
+## Releases
+**First Version of Gui Calculator**
+
+> This version [**( v1.0.0 )**](https://github.com/destrochloridium/Gui-Calculator/releases/tag/v1.0.0) includes these features:
+
+- **Mathematical Operations**
+- **Version Control & Automatic Update**
+- Cursor Animation
+- Modern UI Desing
+- Some Mathematical & Systemic Property
 
 ## License
 - **[MIT LICENSE](http://opensource.org/licenses/mit-license.php)** *is used in this project.*
