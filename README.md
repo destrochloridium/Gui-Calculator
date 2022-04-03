@@ -20,9 +20,9 @@
 ## Introduction
 You can do 4 math operations **quickly** and **easily** in this calculator with a **simple** and **modern interface**.
 ## Installation or Getting Started
-> Your **Python** version must be **3** or **higher** to use this program.
+> Your **Python** version must be **3+** to use this program.
 
-Install the necessary dependencies by running.
+Open terminal at project path and install the necessary dependencies by running.
 * `pip install -r requirements.txt`
 
 > In the event that pip doesn't work, also try the following commands:
@@ -53,7 +53,7 @@ file.
 
 - **Mathematical Operations**
 - **Version Control & Automatic Update**
-- Cursor Animation
+- Simple Cursor & Update Animation
 - Modern UI Desing
 - Some Mathematical & Systemic Property
 
