@@ -8,9 +8,11 @@ from tkinter import *
 from PIL import ImageTk,Image
 from threading import *
 from configparser import ConfigParser
-import src.gui_calculator
 
-VERSION_LINK = "https://raw.githubusercontent.com/destrochloridium/Gui-Calculator/main/docs/version.json"
+APP_AUTHOR = "destrochloridium"
+APP_NAME = "Gui-Calculator"
+APP_BRANCH = "main"
+VERSION_LINK = "https://raw.githubusercontent.com/" + APP_AUTHOR + "/" + APP_NAME + "/" + APP_BRANCH+ "/docs/version.json"
 APP_DIR = os.path.realpath(".")
 
 class Starter:
@@ -21,16 +23,14 @@ class Starter:
         self.load_defaults()
         self.config = ConfigParser()
         self.config.read("docs/config.ini")
-        with open('docs/main_data.json','+r') as text:
-        	self.main_data=json.load(text)
         with open('docs/data.json','+r') as text:
         	self.app_data=json.load(text)
         self.destroy_program=False
 
-        if self.latest_info!=None and self.config["ON CLOSE"]["message"] == "on":#internet varsa
-          #@  if not (self.is_update()):#surumler esit degilse burayi calistir 
-                                                     #esitse bisi yapma
+        if self.latest_info!=None and not (self.is_update()) and self.config["ON CLOSE"]["message"] == "on":
             self.destroy_program=True
+            with open('docs/main_data.json','+r') as text:
+                self.main_data=json.load(text)
             self.main_data_dict={}
             self.data_load(self.main_data,self.main_data_dict)
             self.create_update_messagebox()
@@ -62,6 +62,7 @@ class Starter:
         self.background_dict={}
         self.data_load(self.app_data["items"],self.item_dict)
         self.data_load(self.app_data["backgrounds"],self.background_dict)
+        import src.gui_calculator
         src.gui_calculator.start(self.item_dict,self.background_dict)
 
     def get_latest_info(self):
@@ -80,10 +81,8 @@ class Starter:
         except FileNotFoundError: 
             return {"version" : "", "link" : ""}
 
-    def update(self): 
-        #self.__update_files(".cache/updated_app_data.zip")
-        for i in range(1500):
-            Label(text='b').pack()
+    def update(self):
+        self.__update_files(".cache/updated_app_data.zip")
         self.show_update_messagebox((600,800),"updated")
 
     def __update_files(self, zip_file_path):
@@ -134,8 +133,8 @@ class Starter:
             self.check_button_on_image=ImageTk.PhotoImage(self.main_data_dict["check_on"])
             self.update_message_background_image=ImageTk.PhotoImage(self.main_data_dict["update_message_background"])
             self.updated_message_background_image=ImageTk.PhotoImage(self.main_data_dict["updated_message_background"])
-            self.fly_rocket_image=ImageTk.PhotoImage(self.main_data_dict["fly_rocket"])
-            self.stay_rocket_image=ImageTk.PhotoImage(self.main_data_dict["stay_rocket"])
+            self.fly_rocket_image=ImageTk.PhotoImage(self.main_data_dict["rocket_fly"])
+            self.stay_rocket_image=ImageTk.PhotoImage(self.main_data_dict["rocket_stay"])
             self.toplevel = Toplevel(self.master)
             self.toplevel.tk_setPalette("black")
             self.canvas=Canvas(self.toplevel,height=0,width=0,bg="black")
