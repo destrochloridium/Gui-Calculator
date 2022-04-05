@@ -25,6 +25,7 @@ class Starter:
         self.config.read("docs/config.ini")
         with open('docs/data.json','+r') as text:
         	self.app_data=json.load(text)
+        	
         self.destroy_program=False
 
         if self.latest_info!=None and not (self.is_update()) and self.config["ON CLOSE"]["message"] == "on":
@@ -200,11 +201,11 @@ class Starter:
     def data_load(self,img_list,list):
 	    for x in img_list:
 	        with urlopen(img_list[x]) as response:
-	            bytes = response.read()
-	            stream = BytesIO(bytes)
-	            image = Image.open(stream).convert("RGBA")
-	            stream.close()
-	            list[x]=image
+	            self.bytes = response.read()
+	            self.stream = BytesIO(self.bytes)
+	            self.image = Image.open(self.stream).convert("RGBA")
+	            self.stream.close()
+	            list[x]=self.image
 
 if __name__ == "__main__":
     Starter()
