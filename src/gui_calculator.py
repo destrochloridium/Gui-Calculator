@@ -46,6 +46,8 @@ class Root(Tk):
                 self.x=100
                 self.y+=150
                 
+        self.bind("<KeyPress>",self.key_input_check)
+                
     def calculate(self,number):
         if len(self.show_value)==15 or len(self.show_value)==31 or len(self.show_value)==47:
              self.show_value+="\n"
@@ -129,6 +131,33 @@ class Root(Tk):
         
     def _from_rgb(self,rgb):
         return "#%02x%02x%02x" % rgb
+        
+    def key_input_check(self,event):
+        self.char=""
+        if event.keysym=="equal" or event.keysym=="Enter" or event.keysym=="Return":
+            self.char="="
+        elif event.keysym=="plus":
+            self.char="+"
+        elif event.keysym=="minus":
+            self.char="-"
+        elif event.keysym=="times" or event.keysym=="multiply" or event.keysym=="Asterisk":
+            self.char="×"
+        elif event.keysym=="division" or event.keysym=="divided by":
+            self.char="÷"
+        elif event.keysym=="period":
+            self.char="."
+        elif event.keysym=="Delete" or event.keysym=="BackSpace":
+            self.char="d"
+        elif event.keysym=="c" or event.keysym=="C" or event.keysym=="Clear":
+            self.char="C"
+        elif event.keysym=="Open Parenthesis" or event.keysym=="Open_Parenthesis":
+            self.char="("
+        elif event.keysym=="Close Parenthesis" or event.keysym=="Close_Parenthesis":
+            self.char=")"
+        elif event.keysym in list(("1,2,3,4,5,6,7,8,9,0")):
+            self.char=event.keysym
+            
+        self.calculate(self.char)
         
 def start(item_image_dict,background_image_dict):
     root=Root(item_image_dict,background_image_dict)
