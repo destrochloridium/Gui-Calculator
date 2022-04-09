@@ -3,48 +3,46 @@ from PIL import ImageTk,Image
 import random
 
 class Root(Tk):
-    def __init__(self,item_image_dict,background_image_dict):
+    def __init__(self):
         super().__init__()
          
         self.calculate_value=""
         self.show_value=""
         self.result=""
         self.cursor_state="hidden"
-        self.x,self.y=100,500
+        self.x,self.y=31,153
         self.texts=("C","(",")","÷",
               "7","8","9","×",
               "4","5","6","-",
               "1","2","3","+",
               "•","0","","=")
         
-        self.canvas=Canvas(height=1280,width=720,bg="black")
+        self.canvas=Canvas(height=400,width=225,bg="black")
         self.canvas.place(x=0,y=0)
-         
-        self.background_image_list=[]
-        for i in background_image_dict:
-            self.img=ImageTk.PhotoImage(background_image_dict[i])
-            self.background_image_list.append(self.img)
         
-        self.transparant_background_image=ImageTk.PhotoImage(item_image_dict["transparant_background"])
-        self.canvas.create_image(0,0,image=random.choice(self.background_image_list),anchor=NW)
+        self.background_image_number=random.randint(1,10)
+        self.background_image=ImageTk.PhotoImage(file="docs/images/background_{}.jpg".format(self.background_image_number))
+        self.transparant_background_image=PhotoImage(file="docs/images/transparant_background.png")
+        self.delete_icon=PhotoImage(file="docs/images/delete_icon.png")
+        
+        self.canvas.create_image(0,0,image=self.background_image,anchor=NW)
         self.canvas.create_image(0,0,image=self.transparant_background_image,anchor=NW)
-        self.delete_image=ImageTk.PhotoImage(item_image_dict["delete_icon"]) 
-        self.delete_button=self.canvas.create_image(390,1120,image=self.delete_image,anchor=NW)
+        self.delete_button=self.canvas.create_image(120,346,image=self.delete_icon,anchor=NW)
         self.canvas.tag_bind(self.delete_button,"<Button->",lambda x:self.calculate("d"))
         
-        self.cursor=self.canvas.create_text(70,85,text="|",fill="white",font=("Roboto Light",15),state=self.cursor_state,anchor=NW)
+        self.cursor=self.canvas.create_text(15,17,text="|",fill="white",font=("Roboto Light",5),state=self.cursor_state,anchor=NW)
         self.cursor_animation()
-        self.label=self.canvas.create_text(80,90,text="",fill="white",font=("Roboto Light",15),anchor=NW)
-        self.error_text_1=self.canvas.create_text(150,410,text="Invalid Format Used !",state="hidden",fill="black",font=("Roboto Light",10),anchor=NW)
-        self.error_text_2=self.canvas.create_text(80,375,text="Maximum Number of Characters\n(50) Has Been Reached !",state="hidden",fill="black",font=("Roboto Light",9),anchor=NW)
+        self.label=self.canvas.create_text(20,20,text="",fill="white",font=("Roboto Light",5),anchor=NW)
+        self.error_text_1=self.canvas.create_text(30,125,text="Invalid Format Used !",state="hidden",fill="black",font=("Roboto Light",4),anchor=NW)
+        self.error_text_2=self.canvas.create_text(18,112,text="Maximum Number of Characters\n(50) Has Been Reached !",state="hidden",fill="black",font=("Roboto Light",3),anchor=NW)
         
         for i in range(1,21):
-            self.buttons=self.canvas.create_text(self.x,self.y,text=self.texts[i-1],font=("Roboto Black",18),fill=self._from_rgb((54,54,54)),anchor=NW)
+            self.buttons=self.canvas.create_text(self.x,self.y,text=self.texts[i-1],font=("Roboto Black",8),fill=self._from_rgb((54,54,54)),anchor=NW)
             self.canvas.tag_bind(self.buttons,"<Button->",lambda x,i=i:self.calculate(self.texts[i-1]))
-            self.x+=150
+            self.x+=46
             if i==4 or i==8 or i==12 or i==16:
-                self.x=100
-                self.y+=150
+                self.x=31
+                self.y+=46
                 
         self.bind("<KeyPress>",self.key_input_check)
                 
@@ -159,13 +157,14 @@ class Root(Tk):
             
         self.calculate(self.char)
         
-def start(item_image_dict,background_image_dict):
-    root=Root(item_image_dict,background_image_dict)
-    icon=ImageTk.PhotoImage(item_image_dict["icon"])
+def start():
+    root=Root()
+    icon=ImageTk.PhotoImage(file="docs/images/icon.png")
     root.call("wm", "iconphoto", root._w, icon)
+    root.title("Gui Calculator")
     root.tk_setPalette("black")
-    root_width = 720
-    root_height = 1280
+    root_width = 225
+    root_height = 400
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
     center_x = int(screen_width/2 - root_width / 2)
