@@ -23,17 +23,10 @@ class Starter:
         self.load_defaults()
         self.config = ConfigParser()
         self.config.read("docs/config.ini")
-        with open('docs/data.json','+r') as text:
-        	self.app_data=json.load(text)
-        	
         self.destroy_program=False
 
         if self.latest_info!=None and not (self.is_update()) and self.config["ON CLOSE"]["message"] == "on":
             self.destroy_program=True
-            with open('docs/main_data.json','+r') as text:
-                self.main_data=json.load(text)
-            self.main_data_dict={}
-            self.data_load(self.main_data,self.main_data_dict)
             self.create_update_messagebox()
         else:
             self.run_program()
@@ -59,12 +52,8 @@ class Starter:
     def run_program(self):
         if self.destroy_program==True:
             self.master.destroy()
-        self.item_dict={}
-        self.background_dict={}
-        self.data_load(self.app_data["items"],self.item_dict)
-        self.data_load(self.app_data["backgrounds"],self.background_dict)
         import src.gui_calculator
-        src.gui_calculator.start(self.item_dict,self.background_dict)
+        src.gui_calculator.start()
 
     def get_latest_info(self):
         try:
@@ -84,7 +73,7 @@ class Starter:
 
     def update(self):
         self.__update_files(".cache/updated_app_data.zip")
-        self.show_update_messagebox((600,800),"updated")
+        self.show_update_messagebox((187,250),"updated")
 
     def __update_files(self, zip_file_path):
         self.clear_app_dirs()
@@ -130,17 +119,17 @@ class Starter:
     def create_update_messagebox(self):
             self.master=Tk()
             self.check_button_station="off"
-            self.check_button_off_image=ImageTk.PhotoImage(self.main_data_dict["check_off"])
-            self.check_button_on_image=ImageTk.PhotoImage(self.main_data_dict["check_on"])
-            self.update_message_background_image=ImageTk.PhotoImage(self.main_data_dict["update_message_background"])
-            self.updated_message_background_image=ImageTk.PhotoImage(self.main_data_dict["updated_message_background"])
-            self.fly_rocket_image=ImageTk.PhotoImage(self.main_data_dict["rocket_fly"])
-            self.stay_rocket_image=ImageTk.PhotoImage(self.main_data_dict["rocket_stay"])
+            self.check_button_off_image=PhotoImage(file="docs/images/check_off.png")
+            self.check_button_on_image=PhotoImage(file="docs/images/check_on.png")
+            self.update_message_background_image=ImageTk.PhotoImage(file="docs/images/update_message_background.jpg")
+            self.updated_message_background_image=ImageTk.PhotoImage(file="docs/images/updated_message_background.jpg")
+            self.fly_rocket_image=PhotoImage(file="docs/images/rocket_fly.png")
+            self.stay_rocket_image=PhotoImage(file="docs/images/rocket_stay.png")
             self.toplevel = Toplevel(self.master)
             self.toplevel.tk_setPalette("black")
             self.canvas=Canvas(self.toplevel,height=0,width=0,bg="black")
             self.canvas.place(x=0,y=0)
-            self.show_update_messagebox((600,800),"update")
+            self.show_update_messagebox((187,250),"update")
             self.master.mainloop()
             
     def show_update_messagebox(self,size,station):
@@ -158,14 +147,14 @@ class Starter:
         
         if station=="update":
             self.canvas.create_image(0,0,image=self.update_message_background_image,anchor=NW)
-            self.close=self.canvas.create_text(550,0,text="×",fill="red",font=("Roboto Black", 15),anchor=NW)
-            self.check_button_text=self.canvas.create_text(120,620,text="Do Not Show This Again.",font=("Roboto", 6),fill="white",anchor=NW)
-            self.check_button=self.canvas.create_image(70,620,image=self.check_button_off_image,anchor=NW)
-            self.yes_button=self.canvas.create_text(90,678,text="                                                       ",font=("Roboto Black", 7),fill="cyan",anchor=NW)
-            self.rocket=self.canvas.create_image(465,630,image=self.stay_rocket_image,anchor=NW)
+            self.close=self.canvas.create_text(170,-3,text="×",fill="red",font=("Roboto Black",5),anchor=NW)
+            self.check_button_text=self.canvas.create_text(35,190,text="Do Not Show This Again.",font=("Roboto", 2),fill="white",anchor=NW)
+            self.check_button=self.canvas.create_image(20,190,image=self.check_button_off_image,anchor=NW)
+            self.yes_button=self.canvas.create_text(40,208,text="                                     ",font=("Roboto Black", 3),fill="cyan",anchor=NW)
+            self.rocket=self.canvas.create_image(148,200,image=self.stay_rocket_image,anchor=NW)
             self.canvas.tag_bind(self.close,"<Button->",lambda x:self.run_program())
             self.canvas.tag_bind(self.check_button,"<Button->",lambda x:self.control_check_button())
-            self.canvas.tag_bind(self.yes_button,"<Button->",lambda x:self.show_update_messagebox((600,800),"updating"))
+            self.canvas.tag_bind(self.yes_button,"<Button->",lambda x:self.show_update_messagebox((187,250),"updating"))
         
         elif station=="updating":
             self.thread_1=Thread(target = lambda:self.movement(False),daemon=True)
@@ -175,7 +164,7 @@ class Starter:
             
         elif station=="updated":
             self.canvas.create_image(0,0,image=self.updated_message_background_image,anchor=NW)
-            self.start_button=self.canvas.create_text(90,678,text="                                               ",font=("Roboto Black", 8),anchor=NW)
+            self.start_button=self.canvas.create_text(40,208,text="                                      ",font=("Roboto Black", 3),anchor=NW)
             self.canvas.tag_bind(self.start_button,"<Button->",lambda x:self.run_program())
             
     def movement(self,start):
@@ -185,27 +174,18 @@ class Starter:
             start=True
         
         self.canvas.move(self.rocket, 0,-1)
-        self.canvas.after(10, lambda:self.movement(start))
+        self.canvas.after(20, lambda:self.movement(start))
        
     def control_check_button(self):
         if self.check_button_station=="off":
             self.canvas.itemconfig(self.check_button,image=self.check_button_on_image)
-            self.canvas.itemconfig(self.check_button_text,font=("Roboto",6,"bold"))
+            self.canvas.itemconfig(self.check_button_text,font=("Roboto",2,"bold"))
             self.check_button_station="on"
         elif self.check_button_station=="on":
             self.canvas.itemconfig(self.check_button,image=self.check_button_off_image)
-            self.canvas.itemconfig(self.check_button_text,font=("Roboto",6))
+            self.canvas.itemconfig(self.check_button_text,font=("Roboto",2))
             self.check_button_station="off"
         self.change_defaults(self.check_button_station)
-        
-    def data_load(self,img_list,list):
-	    for x in img_list:
-	        with urlopen(img_list[x]) as response:
-	            self.bytes = response.read()
-	            self.stream = BytesIO(self.bytes)
-	            self.image = Image.open(self.stream).convert("RGBA")
-	            self.stream.close()
-	            list[x]=self.image
 
 if __name__ == "__main__":
     Starter()
