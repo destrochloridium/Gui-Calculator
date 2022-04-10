@@ -30,14 +30,12 @@ class Root(Tk):
         self.delete_button=self.canvas.create_image(120,346,image=self.delete_icon,anchor=NW)
         self.canvas.tag_bind(self.delete_button,"<Button->",lambda x:self.calculate("d"))
         
-        self.cursor=self.canvas.create_text(15,17,text="|",fill="white",font=("Roboto Light",5),state=self.cursor_state,anchor=NW)
+        self.cursor=self.canvas.create_text(15,17,text="|",fill="white",state=self.cursor_state,anchor=NW)
         self.cursor_animation()
-        self.label=self.canvas.create_text(20,20,text="",fill="white",font=("Roboto Light",5),anchor=NW)
-        self.error_text_1=self.canvas.create_text(30,125,text="Invalid Format Used !",state="hidden",fill="black",font=("Roboto Light",4),anchor=NW)
-        self.error_text_2=self.canvas.create_text(18,112,text="Maximum Number of Characters\n(50) Has Been Reached !",state="hidden",fill="black",font=("Roboto Light",3),anchor=NW)
+        self.label=self.canvas.create_text(20,20,text="",fill="white",anchor=NW)
         
         for i in range(1,21):
-            self.buttons=self.canvas.create_text(self.x,self.y,text=self.texts[i-1],font=("Roboto Black",8),fill=self._from_rgb((54,54,54)),anchor=NW)
+            self.buttons=self.canvas.create_text(self.x,self.y,text=self.texts[i-1],fill=self._from_rgb((54,54,54)),anchor=NW)
             self.canvas.tag_bind(self.buttons,"<Button->",lambda x,i=i:self.calculate(self.texts[i-1]))
             self.x+=46
             if i==4 or i==8 or i==12 or i==16:
@@ -47,7 +45,7 @@ class Root(Tk):
         self.bind("<KeyPress>",self.key_input_check)
                 
     def calculate(self,number):
-        if len(self.show_value)==15 or len(self.show_value)==31 or len(self.show_value)==47:
+        if len(self.show_value)==9 or len(self.show_value)==19 or len(self.show_value)==29:
              self.show_value+="\n"
         if number=="=":
             self.show_result()
@@ -57,7 +55,7 @@ class Root(Tk):
             self.show_value=""
             self.canvas.itemconfig(self.label,text=self.show_value)
         elif number=="d":
-            if len(self.show_value)==16 or len(self.show_value)==32 or len(self.show_value)==48:
+            if len(self.show_value)==10 or len(self.show_value)==20 or len(self.show_value)==30:
                 self.calculate_value=self.calculate_value[:-2]
                 self.show_value=self.show_value[:-2]
                 self.canvas.itemconfig(self.label,text=self.show_value)
@@ -65,7 +63,7 @@ class Root(Tk):
                 self.calculate_value=self.calculate_value[:-1]
                 self.show_value=self.show_value[:-1]
                 self.canvas.itemconfig(self.label,text=self.show_value)
-        if len(self.show_value)<53:
+        if len(self.show_value)<30:
             if number=="÷":
                 self.calculate_value+="/"
                 self.show_value+="÷"
@@ -85,31 +83,30 @@ class Root(Tk):
                 self.show_value+=str(number)
                 self.canvas.itemconfig(self.label,text=self.show_value)
         else:
-            self.canvas.itemconfig(self.error_text_2,state="normal")
+            self.canvas.itemconfig(self.label,text="Max Input\nReached !")
             self.after(2000,lambda :self.canvas.itemconfig(
-            self.error_text_2,state="hidden"))
+            self.label,text=self.show_value))
             
             
     def show_result(self):
          try:
             self.result=eval(str(self.calculate_value))
-            if self.result>999999999999999:
+            if self.result>999999999:
                 self.result="{:.2E}".format(self.result)
             if isinstance(self.result, float)==True:
-                if len(str(int(self.result)))>9:
+                if len(str(int(self.result)))>6:
                     self.result=round(self.result,1)
                 else:
-                    self.result=round(self.result,5)
+                    self.result=round(self.result,3)
             if str(self.result)[-2:len(str(self.result))]==".0":
                 self.result=int(self.result)
             self.canvas.itemconfig(self.label,text=self.result)
+            self.calculate_value=""
+            self.show_value=""
          except:
             self.result="error"
-            self.canvas.itemconfig(self.error_text_1,state="normal")
-            self.after(2000,lambda :self.canvas.itemconfig(
-             self.error_text_1,state="hidden"))
-         self.calculate_value=""
-         self.show_value="" 
+            self.canvas.itemconfig(self.label,text="Input Error !")
+            self.after(2000,lambda :self.canvas.itemconfig(self.label,text=self.show_value))
      
     def cursor_animation(self):
         if self.result=="" and self.show_value=="":
