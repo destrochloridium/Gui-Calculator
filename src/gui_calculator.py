@@ -6,46 +6,46 @@ class Root(Tk):
     def __init__(self):
         super().__init__()
          
-        self.calculate_value=""
-        self.show_value=""
-        self.result=""
-        self.cursor_state="hidden"
-        self.x,self.y=31,153
-        self.texts=("C","(",")","÷",
-              "7","8","9","×",
-              "4","5","6","-",
-              "1","2","3","+",
-              "•","0","","=")
+        self.calculate_value,self.show_value,self.result,self.cursor_state="","","","hidden"
+        self.x,self.y,self.n=0,125,0
+        self.background_image_list,self.background_animation_count,self.button_image_dict=[],0,{}
+        self.content={"C":"C","open_parenthesis":"(","close_parenthesis":")","division":"÷","seven":"7","eight":"8","nine":"9","multiply":"×","four":"4","five":"5","six":"6","minus":"-","one":"1","two":"2","three":"3","plus":"+","period":"•","zero":"0","delete":"d","equal":"=","empty":"","right_corner":"","left_corner":""}
+        self.place_list=["left_corner","empty","empty","empty","empty","empty","empty","empty","right_corner","empty","C","empty","open_parenthesis","empty","close_parenthesis","empty","division","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","seven","empty","eight","empty","nine","empty","multiply","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","four","empty","five","empty","six","empty","minus","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","one","empty","two","empty","three","empty","plus","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","period","empty","zero","empty","delete","empty","equal","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty"]
         
-        self.canvas=Canvas(height=400,width=225,bg="black")
+        self.canvas=Canvas(height=400,width=225,bg=_from_rgb((128,128,128)))
         self.canvas.place(x=0,y=0)
         
-        self.background_image_number=random.randint(1,10)
-        self.background_image=ImageTk.PhotoImage(file="docs/images/background_{}.jpg".format(self.background_image_number))
-        self.transparant_background_image=PhotoImage(file="docs/images/transparant_background.png")
-        self.delete_icon=PhotoImage(file="docs/images/delete_icon.png")
+        for i in range(72):
+            self.image=ImageTk.PhotoImage(file="docs/images/backgrounds/background_{}.jpg".format(i))
+            self.background_image_list.append(self.image)
+            
+        self.background_image=self.canvas.create_image(0,150,image="",anchor=NW)
+        self.background_animation()
         
-        self.canvas.create_image(0,0,image=self.background_image,anchor=NW)
-        self.canvas.create_image(0,0,image=self.transparant_background_image,anchor=NW)
-        self.delete_button=self.canvas.create_image(120,346,image=self.delete_icon,anchor=NW)
-        self.canvas.tag_bind(self.delete_button,"<Button->",lambda x:self.calculate("d"))
-        
-        self.cursor=self.canvas.create_text(15,17,text="|",fill="white",state=self.cursor_state,anchor=NW)
+        for i in self.content:
+            self.image=Image.open("docs/images/buttons/{}.png".format(i))
+            self.image=ImageTk.PhotoImage(self.image)
+            self.button_image_dict[i]=self.image
+            
+        self.cursor=Label(text="|",fg=_from_rgb((26,26,26)),bg=_from_rgb((128,128,128)))
+        self.cursor.place(x=5,y=5)
         self.cursor_animation()
-        self.label=self.canvas.create_text(20,20,text="",fill="white",anchor=NW)
+        self.label=Label(text="",justify=LEFT,fg=_from_rgb((26,26,26)),bg=_from_rgb((128,128,128)))
+        self.label.place(x=5,y=5)
         
-        for i in range(1,21):
-            self.buttons=self.canvas.create_text(self.x,self.y,text=self.texts[i-1],fill=self._from_rgb((54,54,54)),anchor=NW)
-            self.canvas.tag_bind(self.buttons,"<Button->",lambda x,i=i:self.calculate(self.texts[i-1]))
-            self.x+=46
-            if i==4 or i==8 or i==12 or i==16:
-                self.x=31
-                self.y+=46
+        for i in self.place_list:
+            self.button=self.canvas.create_image(self.x,self.y,image=self.button_image_dict[i],anchor=NW)
+            self.canvas.tag_bind(self.button,"<Button->",lambda x,i=i:self.calculate(self.content[i]))
+            self.x+=25
+            self.n+=1
+            if int(str(self.n/9)[-1])==0:
+                self.y+=25
+                self.x=0
                 
         self.bind("<KeyPress>",self.key_input_check)
                 
     def calculate(self,number):
-        if len(self.show_value)==9 or len(self.show_value)==19 or len(self.show_value)==29:
+        if len(self.show_value)==10:
              self.show_value+="\n"
         if number=="=":
             self.show_result()
@@ -53,40 +53,38 @@ class Root(Tk):
             self.result=""
             self.calculate_value=""
             self.show_value=""
-            self.canvas.itemconfig(self.label,text=self.show_value)
+            self.label["text"]=self.show_value
         elif number=="d":
-            if len(self.show_value)==10 or len(self.show_value)==20 or len(self.show_value)==30:
+            if len(self.show_value)==11:
                 self.calculate_value=self.calculate_value[:-2]
                 self.show_value=self.show_value[:-2]
-                self.canvas.itemconfig(self.label,text=self.show_value)
+                self.label["text"]=self.show_value
             else:
                 self.calculate_value=self.calculate_value[:-1]
                 self.show_value=self.show_value[:-1]
-                self.canvas.itemconfig(self.label,text=self.show_value)
-        if len(self.show_value)<30:
+                self.label["text"]=self.show_value
+        if len(self.show_value)<21:
             if number=="÷":
                 self.calculate_value+="/"
                 self.show_value+="÷"
-                self.canvas.itemconfig(self.label,text=self.show_value)
+                self.label["text"]=self.show_value
             elif number=="×":
                 self.calculate_value+="*"
                 self.show_value+="×"
-                self.canvas.itemconfig(self.label,text=self.show_value)
+                self.label["text"]=self.show_value
             elif number=="•":
                 self.calculate_value+="."
                 self.show_value+="."
-                self.canvas.itemconfig(self.label,text=self.show_value)
+                self.label["text"]=self.show_value
             elif number in list(("C","d","=")):
                 pass
             else:
                 self.calculate_value+=str(number)
                 self.show_value+=str(number)
-                self.canvas.itemconfig(self.label,text=self.show_value)
+                self.label["text"]=self.show_value
         else:
-            self.canvas.itemconfig(self.label,text="Max Input\nReached !")
-            self.after(2000,lambda :self.canvas.itemconfig(
-            self.label,text=self.show_value))
-            
+            self.label["text"]="Max Input\nReached !"
+            self.after(2000,lambda :self.label.config(text=self.show_value))
             
     def show_result(self):
          try:
@@ -100,32 +98,33 @@ class Root(Tk):
                     self.result=round(self.result,3)
             if str(self.result)[-2:len(str(self.result))]==".0":
                 self.result=int(self.result)
-            self.canvas.itemconfig(self.label,text=self.result)
+            self.label["text"]=self.result
             self.calculate_value=""
             self.show_value=""
          except:
             self.result="error"
-            self.canvas.itemconfig(self.label,text="Input Error !")
-            self.after(2000,lambda :self.canvas.itemconfig(self.label,text=self.show_value))
+            self.label["text"]="Input Error !"
+            self.after(2000,lambda :self.label.config(text=self.show_value))
      
     def cursor_animation(self):
         if self.result=="" and self.show_value=="":
             if self.cursor_state=="normal":
                 self.cursor_state="hidden"
-                self.canvas.itemconfig(
-                self.cursor,state=self.cursor_state)
+                self.cursor.place_forget()
             elif self.cursor_state=="hidden":
                 self.cursor_state="normal"
-                self.canvas.itemconfig(
-                self.cursor,state=self.cursor_state)
+                self.cursor.place(x=5,y=5)
         else:
             self.cursor_state="hidden"
-            self.canvas.itemconfig(
-            self.cursor,state=self.cursor_state)
+            self.cursor.place_forget()
         self.after(500,self.cursor_animation)
         
-    def _from_rgb(self,rgb):
-        return "#%02x%02x%02x" % rgb
+    def background_animation(self):
+        self.canvas.itemconfig(self.background_image,image=self.background_image_list[self.background_animation_count])
+        self.background_animation_count+=1
+        if self.background_animation_count==71:
+            self.background_animation_count=0
+        self.after(100,self.background_animation)
         
     def key_input_check(self,event):
         self.char=""
@@ -154,12 +153,15 @@ class Root(Tk):
             
         self.calculate(self.char)
         
+def _from_rgb(rgb):
+    return "#%02x%02x%02x" % rgb
+        
 def start():
     root=Root()
     icon=ImageTk.PhotoImage(file="docs/images/icon.png")
     root.call("wm", "iconphoto", root._w, icon)
     root.title("Gui Calculator")
-    root.tk_setPalette("black")
+    root.tk_setPalette(_from_rgb((128,128,128)))
     root_width = 225
     root_height = 400
     screen_width = root.winfo_screenwidth()
