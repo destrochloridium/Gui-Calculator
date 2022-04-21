@@ -107,7 +107,7 @@ class Starter:
         data_to_img(self.data,self.item_dict)
         self.check_button_station="off"
         self.toplevel = Toplevel(self.master)
-        self.toplevel.attributes('-topmost', 'true')
+        self.toplevel.attributes("-topmost", "true")
         self.toplevel.tk_setPalette("black")
         self.toplevel.resizable(False, False)
         self.toplevel.overrideredirect (True)
@@ -175,7 +175,7 @@ class Starter:
         
 def get_dpi():
     screen = Tk()
-    current_dpi = screen.winfo_fpixels('1i')
+    current_dpi = screen.winfo_fpixels("1i")
     screen.destroy()
     return current_dpi
     
