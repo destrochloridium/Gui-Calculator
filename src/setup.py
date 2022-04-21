@@ -26,7 +26,7 @@ class Starter:
         self.destroy_program=False
         self.font_size=round(2520/get_dpi())
 
-        if self.latest_info!=None and not (self.is_update()) and self.config["ON CLOSE"]["message"] == "on":
+        if self.latest_info!=None and not (self.is_update()) and self.check_button_station== "on":
             with open("docs/main_data.json","+r") as text:
                 self.data=json.load(text)
             self.item_dict={}
