@@ -52,8 +52,10 @@ file.
 
 - **Mathematical Operations**
 - **Version Control & Automatic Update**
+- **Dark / Light Mode**
+- Background Animation
 - Simple Cursor & Update Animation
-- Modern UI Desing
+- Modern UI Design
 - Some Mathematical & Systemic Property
 
 ## License
