@@ -13,11 +13,11 @@ class Root(Tk):
         self.set_vars()
         self.create_widgets()
         
-        self.bind('<Button-1>', self.get_pos)
+        self.bind("<Button-1>", self.get_pos)
         self.bind("<KeyPress>",self.keyboard_input_check)
         
     def load_default_vars(self):
-        with open('docs/data.json','+r') as text:
+        with open("docs/data.json","+r") as text:
             self.data=json.load(text)
         self.items,self.backgrounds,self.light_buttons,self.dark_buttons=self.data["items"],self.data["backgrounds"],self.data["light_buttons"],self.data["dark_buttons"]
         self.item_image_dict,self.background_image_dict,self.light_button_image_dict,self.dark_button_image_dict={},{},{},{}
@@ -26,7 +26,7 @@ class Root(Tk):
         data_to_img(self.light_buttons,self.light_button_image_dict)
         data_to_img(self.dark_buttons,self.dark_button_image_dict)
         
-        self.font_size=round(2520/self.winfo_fpixels('1i'))
+        self.font_size=round(2520/self.winfo_fpixels("1i"))
         self.font="Roboto {}".format(self.font_size)
         
         self.config_data = ConfigParser()
@@ -55,7 +55,7 @@ class Root(Tk):
         self.label=Label(text="",justify=LEFT,bg=rgb_to_hex((24,31,50)),font=self.font)
         self.label.place(x=5,y=30)
         
-        self.frame=Frame(relief='raised',bg=self.background_color,bd=0,highlightthickness=0)
+        self.frame=Frame(relief="raised",bg=self.background_color,bd=0,highlightthickness=0)
         self.frame.place(x=-1,y=-1,width=226,height=30)
         self.close_button=Button(image=self.item_image_dict["close"],bg=self.background_color,fg=self.text_color,activebackground=self.background_color,bd=0,highlightthickness=0,font=self.font,command=self.destroy)
         self.close_button.place(x=196,y=-1,width=30,height=30)
@@ -191,9 +191,11 @@ class Root(Tk):
         self.char=""
         for i in self.keyboard_input_dict:
             if event.keysym in self.keyboard_input_dict[i]:
-                self.char=event.keysym
+                self.char=i
         if event.keysym in self.keyboard_input_dict["numbers"]:
             self.char=event.keysym
+        elif event.keysym=="space":
+            self.update_mode()
         self.calculate(self.char)
         
     def get_pos(self,event):
@@ -205,12 +207,12 @@ class Root(Tk):
         self.xwin = self.xwin - self.startx
         def move_window(event):
             self.config(cursor="fleur")
-            self.geometry(f'+{event.x_root + self.xwin}+{event.y_root + self.ywin}')
+            self.geometry(f"+{event.x_root + self.xwin}+{event.y_root + self.ywin}")
         def release_window(event):
             self.config(cursor="arrow")
             
-        self.bind('<B1-Motion>', move_window)
-        self.bind('<ButtonRelease-1>', release_window)
+        self.bind("<B1-Motion>", move_window)
+        self.bind("<ButtonRelease-1>", release_window)
         
 def rgb_to_hex(rgb):
     return "#%02x%02x%02x" % rgb
@@ -239,5 +241,5 @@ def start():
     root.geometry(f"{root_width}x{root_height}+{center_x}+{center_y}")
     root.overrideredirect(True)
     root.resizable(False,False)
-    root.attributes('-topmost', 'true')
+    root.attributes("-topmost", "true")
     root.mainloop()
