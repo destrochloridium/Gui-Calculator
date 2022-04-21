@@ -119,7 +119,7 @@ class Root(Tk):
                 self.label["text"]=self.displayed_value
         else:
             self.label["text"]="Max Input\nReached !"
-            self.after(2000,lambda :self.label.config(text=self.displayed_value))
+            self.after(1000,lambda :self.label.config(text=self.displayed_value))
             
     def show_result(self):
          try:
@@ -139,7 +139,7 @@ class Root(Tk):
          except:
             self.result="error"
             self.label["text"]="Input Error !"
-            self.after(2000,lambda :self.label.config(text=self.displayed_value))
+            self.after(1000,lambda :self.label.config(text=self.displayed_value))
             
     def update_mode(self):
         self.mode_count=0
